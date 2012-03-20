@@ -1,0 +1,2 @@
+find . \( -name  '*.aux' -o -name '*.lot' -o -name '*.lof' -o -name '*.log' -o -name '*.bbl' -o -name '*.blg' -o -name '*.gz' -o -name '*.toc' -o -name '*.dvi' \) -delete
+ctanify  -p tikz-backgammon tikz-backgammon.sty tikz-backgammon.pdf README   tikz-backgammon.tex=doc/latex/tikz-backgammon
