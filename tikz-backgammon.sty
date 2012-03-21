@@ -15,10 +15,10 @@
 % This package consists of the file tikz-backgammon.sty and documentation files
 % tikz-backgammon.tex and tikz-backgammon.pdf
 %
-% Version 0.5 2012/03/20
+% Version 0.6 2012/03/20
 %
 %
-\ProvidesPackage{tikz-backgammon}[2012/03/20 Backgammon game display using TikZ v0.5]
+\ProvidesPackage{tikz-backgammon}[2012/03/20 Backgammon game display using TikZ v0.6]
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
 \usetikzlibrary{positioning}
@@ -26,17 +26,17 @@
 % Construct the board
 %
 % alternating colours for the board
-\newcommand*{\BW}{\pgfmathifthenelse{mod(\x,2)==0}{1}{0}\let\fillstyle\pgfmathresult}
-\newcommand*{\WB}{\pgfmathifthenelse{mod(\x,2)==0}{0}{1}\let\fillstyle\pgfmathresult}
+\newcommand*{\bk@BW}{\pgfmathifthenelse{mod(\x,2)==0}{1}{0}\let\bk@fillstyle\pgfmathresult}
+\newcommand*{\bk@WB}{\pgfmathifthenelse{mod(\x,2)==0}{0}{1}\let\bk@fillstyle\pgfmathresult}
 % construct a  down point
-\newcommand*{\dpoint}{%
-\BW
-\draw[thick,style=\fillstyle]
+\newcommand*{\bk@dpoint}{%
+\bk@BW
+\draw[thick,style=\bk@fillstyle]
      (\x,0) -- (\x+3/2,15) -- (\x+3,0) -- cycle; }
 % construct an up point
-\newcommand{\upoint}{%
-\WB
-\draw[thick,style=\fillstyle]
+\newcommand{\bk@upoint}{%
+\bk@WB
+\draw[thick,style=\bk@fillstyle]
      (\x,32) -- (\x+3/2,17) -- (\x+3,32) -- cycle; }
 % set basic tikzparameters     
 \tikzset{1/.style={fill=\boardblack},
@@ -46,7 +46,7 @@
 				cube/.style={minimum size=.5cm}
 				}
 % initialization
-\def\cubepos{above}
+\newcommand*\bk@cubepos{above}
 \pgfdeclarelayer{board}
 \pgfdeclarelayer{pieces}
 \pgfsetlayers{board,pieces,main}
@@ -59,41 +59,45 @@
 \newlength{\betweengameskip}
 \setlength{\betweengameskip}{2\baselineskip}
 % initial state of the doubling cube
-\newcommand*{\doublestate}{neutral}
-\newcommand*{\doublenum}{2}
+\newcommand*{\bk@doublestate}{neutral}
+\newcommand*{\bk@doublenum}{2}
 % create 24 counters for the point counts
 % create 24 macros for the point state (black,white,none)
 \foreach \x in {1,...,24}{
 \newcounter{bk@pt\x}
 \expandafter\gdef\csname bk@state\x\endcsname{none}
 }
+% create counter and macro for the state of the bar
+\newcounter{bk@bar}
+\newcommand*{\bk@barstate}{none}
 
 % some debugging commands
 \newcommand*\showpoint[1]{\the\csname c@bk@pt#1\endcsname}
-\newcommand*\setstate[2]{\expandafter\gdef\csname bk@state#1\endcsname{#2}}
+\newcommand*\bk@setstate[2]{\expandafter\gdef\csname bk@state#1\endcsname{#2}}
+\newcommand*\bk@addcount[2]{\global\csname c@bk@pt#1\endcsname #2\relax}
 \newcommand*\usestate[1]{\csname bk@state#1\endcsname}
 
 % basic command to draw the board
 % all of these numbers probably shouldn't be hard coded
 %
-\newcommand{\drawboard}{%
+\newcommand{\bk@drawboard}{%
   \begin{pgfonlayer}{board}
 % draw the boarder and the point numbers
     \draw[line width=4pt] (0,0) -- (0,32) -- (38,32) -- (38,0) -- cycle;
     \foreach \x in {1,...,6}{
        \node[sans] (\x) at (39.5-\x*3,-1.5)  {\x};
-        \pgfmathparse{int(\x+6)}\let\nodename\pgfmathresult
-        \node[sans] (\nodename) at (25.5-\x*3-6,-1.5)  {\nodename};
-        \pgfmathparse{int(25-\x)}\let\nodename\pgfmathresult
-        \node[sans] (\nodename) at (39.5-\x*3,33.5)  {\nodename};
-        \pgfmathparse{int(\x+12)}\let\nodename\pgfmathresult
-         \node[sans] (\nodename) at (25.5+\x*3-27,33.5)  {\nodename};
+        \pgfmathparse{int(\x+6)}\let\bk@nodename\pgfmathresult
+        \node[sans] (\bk@nodename) at (25.5-\x*3-6,-1.5)  {\bk@nodename};
+        \pgfmathparse{int(25-\x)}\let\bk@nodename\pgfmathresult
+        \node[sans] (\bk@nodename) at (39.5-\x*3,33.5)  {\bk@nodename};
+        \pgfmathparse{int(\x+12)}\let\bk@nodename\pgfmathresult
+         \node[sans] (\bk@nodename) at (25.5+\x*3-27,33.5)  {\bk@nodename};
     }
 % now draw the first half points
   \foreach \x in {0,3,...,15}
-     \dpoint;
+     \bk@dpoint;
   \foreach \x in {0,3,...,15}
-     \upoint;
+     \bk@upoint;
 % draw the bar and set the anchors for bar and the doubling cube
   \draw[very thick,fill=brown](18,0) -- (18,32) -- (20,32) -- (20,0) -- cycle;
   \node (barcenter) at (19,14) {};
@@ -102,9 +106,9 @@
   \node (neutral double) at (40,12.5) {};
 % draw the other half of the points
   \foreach \x in {20,23,...,35}
-     \dpoint;
+     \bk@dpoint;
   \foreach \x in {20,23,...,35}
-     \upoint;
+     \bk@upoint;
   \end{pgfonlayer}
 }
 % commands to place markers on a point and set its state
@@ -115,62 +119,62 @@
 % first for a black point
 \newcommand{\blackpoint}[2]{%
   \global\csname c@bk@pt#1\endcsname #2\relax
-  \setstate{#1}{black}
+  \bk@setstate{#1}{black}
 % check to see if we're on an up point or a down point
-  \pgfmathparse{ifthenelse(#1>12,"below","above")}\let\pos\pgfmathresult
+  \pgfmathparse{ifthenelse(#1>12,"below","above")}\let\bk@pos\pgfmathresult
   \begin{pgfonlayer}{pieces}
     \foreach \x in {1,...,#2}
-       \node[fill=\black,style=stone,\pos=.5*\x-.45  of #1]  {};
+       \node[fill=\black,style=stone,\bk@pos=.5*\x-.45  of #1]  {};
   \end{pgfonlayer}}
 % same again for a white point
 \newcommand{\whitepoint}[2]{%
   \global\csname c@bk@pt#1\endcsname #2\relax
-  \setstate{#1}{white}
-  \pgfmathparse{ifthenelse(#1>12,"below","above")}\let\pos\pgfmathresult
+  \bk@setstate{#1}{white}
+  \pgfmathparse{ifthenelse(#1>12,"below","above")}\let\bk@pos\pgfmathresult
   \begin{pgfonlayer}{pieces}
      \foreach \x in {1,...,#2}
-        \node[fill=\white,style=stone,\pos=.5*\x-.45  of #1]  {};
+        \node[fill=\white,style=stone,\bk@pos=.5*\x-.45  of #1]  {};
   \end{pgfonlayer}}
 % now a generic version of the command for use in displaying the board
 % this is really an internal command
-\newcommand{\placepoint}[2]{%
+\newcommand{\bk@placepoint}[2]{%
   \let\ptname#1
   \ifnumcomp{#2}{<}{1}
      {}
-     {\pgfmathparse{ifthenelse(#1>12,"below","above")}\let\pos\pgfmathresult
+     {\pgfmathparse{ifthenelse(#1>12,"below","above")}\let\bk@pos\pgfmathresult
       \begin{pgfonlayer}{pieces}
          \foreach \x in {1,...,#2}
-            \node[fill=\usestate{\ptname},style=stone,\pos=.5*\x-.45  of \ptname]  {};
+            \node[fill=\usestate{\ptname},style=stone,\bk@pos=.5*\x-.45  of \ptname]  {};
        \end{pgfonlayer}
       }
 }
 % command to place pieces on the bar
+% for the moment only one colour can be on the bar at a time
+% this may not be correct, in which case we need two counters/states	
 \newcommand*{\onbar}[2]{%
-  \begin{pgfonlayer}{board}
-     \foreach \x in {1,...,#2}
-         \node[fill=\csname#1\endcsname,style=stone,above=.5*\x-.35 of barcenter)] {};
-      \end{pgfonlayer}
+  \setcounter{bk@bar}{#2}
+  \gdef\bk@barstate{#1}
 }
 % user command to set a double
 % syntax is \double{<owner>}{amount}
 \newcommand*{\double}[2]{%
-  \let\doublenum#2
+  \let\bk@doublenum#2
   \ifstrequal{#1}{neutral}
-     {\gdef\doublestate{neutral double}}
+     {\gdef\bk@doublestate{neutral double}}
      {\ifstrequal{#1}{white}
-        {\gdef\cubepos{below}\gdef\doublestate{white double}}
-        {\gdef\cubepos{above}\gdef\doublestate{black double}}
+        {\gdef\bk@cubepos{below}\gdef\bk@doublestate{white double}}
+        {\gdef\bk@cubepos{above}\gdef\bk@doublestate{black double}}
      }
 }
-% internal command to place the doubling cube in the correct place
+% command to place the doubling cube in the correct place
 \newcommand*{\placedouble}{
-   \node[draw,style=cube, \cubepos=.5cm of \doublestate %
-  ,font={\bfseries\sffamily}] {\doublenum};}
+   \node[draw,style=cube, \bk@cubepos=.5cm of \bk@doublestate %
+  ,font={\bfseries\sffamily}] {\bk@doublenum};}
   
 % command to set a new game and display it  
 \newcommand*{\newgame}[1][\defaultscale]{%
   \begin{tikzpicture}[scale=#1]
-     \drawboard
+     \bk@drawboard
 		 \whitepoint{1}{2}
 		 \whitepoint{12}{5}
 		 \whitepoint{17}{3}
@@ -183,6 +187,27 @@
 		 \placedouble
   \end{tikzpicture}}
   
+% command to draw a blank board
+\newcommand*{\blankboard}[1][\defaultscale]{%
+	\begin{tikzpicture}[scale=#1]
+		\bk@drawboard
+	\end{tikzpicture}
+}
+
+% command to setup the pieces for a new game without drawing anything
+\newcommand*\newpieces{
+	\foreach \x in {1,12,17,19}
+   	{\bk@setstate{\x}{white}}
+	\foreach \x in {6,8,13,24}
+		{\bk@setstate{\x}{black}}
+	\foreach \x in {1,24}
+		{\bk@addcount{\x}{2}}
+	\foreach \x in {12,19,13,6}
+		{\bk@addcount{\x}{5}}
+	\foreach \x in {17,8}
+		{\bk@addcount{\x}{3}}
+	\double{neutral}{2}
+}		
 % commands to move first black, then white  
 
 \newcommand\blackmove[4]{
@@ -219,12 +244,20 @@
 \newcommand{\displayboard}{%
   \par\vspace{\betweengameskip}
   \begin{tikzpicture}[scale=\defaultscale]
-		\drawboard
+		\bk@drawboard
 		\foreach \x in {1,...,24}{
- 			\placepoint{\x}{\the\csname c@bk@pt\x\endcsname}}
+ 			\bk@placepoint{\x}{\the\csname c@bk@pt\x\endcsname}}
+		\ifnumcomp{\value{bk@bar}}{>}{0}{
+		\foreach \x in {1,...,\value{bk@bar}}
+         \node[fill=\csname\bk@barstate\endcsname,style=stone,above=.5*\x-.35 of barcenter)] {};}{}
  		\placedouble
 	\end{tikzpicture}
 }
 \endinput
 % Still to be added:
+% need two bar states and counts (black/white) + ways to display them
+% need commands for entering from the bar (should be part of moves?)
+% error checking for valid moves?
+% check max stones on a point (display count on the bottom stone instead?)
+% starred version of move command for doubles?
 % Displaying the dice (easy, but I can't be bothered)
