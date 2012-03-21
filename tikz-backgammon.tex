@@ -1,16 +1,94 @@
-% !TEX TS-program = pdfLaTeX
-% This will become the documentation for the package.
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
+\title{\textbf{The \pkg{tikz-backgammon} package}}
+\author{\textbf{Alan Munn}\\Department of Linguistics and Languages\\\texttt{\href{mailto:amunn@msu.edu}{amunn@msu.edu}}}
+\date{Version 0.5\\March 20, 2012}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{titling}
+\usepackage[utf8]{inputenc}
+\usepackage{array, booktabs, multicol, fancyhdr, xspace,tabularx}
+\usepackage{enumitem}
+\usepackage{fancyvrb,listings,url}
+\usepackage[sf]{titlesec}
 \usepackage{tikz-backgammon}
+\usepackage[colorlinks=true]{hyperref}
+
+
+
+\DefineShortVerb{\|}
+\newcommand*\bs{\textbackslash}
+
+
+\IfFileExists{luximono.sty}%
+{%
+  \usepackage[scaled]{luximono}%
+}
+{%
+  \IfFileExists{beramono.sty}%
+  {%
+    \usepackage[scaled]{beramono}%
+  }{}
+}
+
+  
+\lstset{%
+    basicstyle=\ttfamily\small,
+    commentstyle=\itshape\ttfamily\small,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakautoindent=true,
+    frame=single
+    captionpos=t
+    language=TeX
+}
+  
+\newcommand*{\pkg}[1]{\texttt{#1}\xspace}
+\setitemize[1]{label={}}
+\setitemize[2]{label={}}
+\setdescription{font={\normalfont}}
+\setlength{\droptitle}{-1in}
+
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{\emph{}}
+\cfoot{\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+
 \begin{document}
-\newgame
-\blackmove{13}{8}{8}{5}
-\whitemove{1}{7}{1}{7}
-\double{white}{4}
-\blackmove{24}{18}{24}{18}
-\blackmove{8}{2}{8}{2}
-\blackmove{8}{4}{13}{10}
-\whitemove{12}{16}{12}{15}
+\maketitle
+\thispagestyle{empty}
+\renewcommand{\abstractname}{\sffamily Abstract}
+\abstract{The |tikz-backgammon| package is designed to make annotating and representing backgammon board states easy. Arbitrary boards may be set, or a whole game can be input with the current state of the game output as a board at any point.  The doubling cube is also represented.}
+\section{Summary of User Commands}
+{\centering
+\begin{tabular}{ll}
+\toprule
+\multicolumn{1}{>{\bfseries}c}{Command} & \multicolumn{1}{>{\bfseries}c}{Description}\\
+\midrule
+	 |\newgame| & draw a board set for a new game\\
+	 |\newpieces| & set up the pieces for a new game without drawing the board\\
+	 |\blankboard| & draw a blank board	\\
+	 |\onbar| & add stones to the bar\\
+	 |\double| & set doubling cube and possession	\\
+	 |\blackmove| & move for black\\
+	 |\whitemove| & move for white\\
+	 |\displayboard| & display the current state of the game\\
+\midrule
+	 |\blackpoint| & add black stones to a point\\
+	 |\whitepoint| & add white stones to a point\\
+	 |\placedouble| & command to place the double (only for manual setup)\\
+\bottomrule
+\end{tabular}}
+
+\blankboard{.2}
+\newpieces
+\onbar{black}{2}
+\onbar{white}{1}
 \displayboard
 \end{document}
-
