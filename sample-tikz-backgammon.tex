@@ -1,0 +1,16 @@
+% This is a test document for the tikz-backgammon package.
+\documentclass[12pt]{article}
+\usepackage{tikz-backgammon}
+\begin{document}
+\newgame
+\blackmove*{24}{18}{13}{7}
+\whitemove*{12}{15}{1}{4}
+\blackmove{8}{6}{8}{6}
+\blackmove{7}{6}{7}{6}
+\renewcommand\defaultscale{.4}
+\onbar{black}{2}
+\double{white}{2}
+\onbar{white}{2}
+\displayboard
+\end{document}
+
