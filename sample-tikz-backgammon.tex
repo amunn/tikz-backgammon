@@ -3,14 +3,36 @@
 \usepackage{tikz-backgammon}
 \begin{document}
 \newgame
+\blackboard
+\roll{66}
+\blackboard
+
+Black view
 \blackmove*{24}{18}{13}{7}
-\whitemove*{12}{15}{1}{4}
+\double{black}{2}
+White view
+
+\whiteboard
+\whitemove*{6}{4}{13}{11}
+\roll[white]{64}
+\double{white}{4}
+Black view
+\whitepoint{23}{6}
+\blackpoint{6}{8}
+\boardcaption{A good position\\for all sorts of moves}
+\blackboard
+\whiteboard
+\end{document}
+\blackmove*{6}{5}{13}{9}
+\whitemove*{19}{21}{17}{22}
 \blackmove{8}{6}{8}{6}
-\blackmove{7}{6}{7}{6}
-\renewcommand\defaultscale{.4}
-\onbar{black}{2}
-\double{white}{2}
-\onbar{white}{2}
-\displayboard
+\blackboard
+\whitebo
+%\blackmove{7}{6}{7}{6}
+%
+%\onbar{black}{2}
+%\double{white}{2}
+%\onbar{white}{2}
+%\displayboard
 \end{document}
 
