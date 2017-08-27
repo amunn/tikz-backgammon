@@ -71,23 +71,26 @@
 \toprule
 \multicolumn{1}{>{\bfseries}c}{Command} & \multicolumn{1}{>{\bfseries}c}{Description}\\
 \midrule
-	 |\newgame| & draw a board set for a new game\\
-	 |\newpieces| & set up the pieces for a new game without drawing the board\\
+	 |\newgame| & set the pieces for a new game\\
+%	 |\newpieces| & set up the pieces for a new game without drawing the board\\
 	 |\blankboard| & draw a blank board	\\
 	 |\onbar| & add stones to the bar\\
 	 |\double| & set doubling cube and possession	\\
 	 |\blackmove| & move for black\\
 	 |\whitemove| & move for white\\
-	 |\displayboard| & display board (will be deprecated)\\
+%	 |\displayboard| & display board (will be deprecated)\\
 	 |\blackboard| & display the current state of the game: black's view\\
 	 |\whiteboard| & display the current state of the game: white's view\\
 \midrule
 	 |\blackpoint| & add black stones to a point\\
 	 |\whitepoint| & add white stones to a point\\
 	 |\placedouble| & command to place the double (only for manual setup)\\
+	 |\roll| & set the dice to a particular value for white or black\\
+	 |\boardcaption| & set a caption for the board\\
+	 |\boardcaptionformat| & format for the captions
 \bottomrule
 \end{tabular}}
 
 \section{Acknowledgements}
-This package was created as a response to the following question on TeX Stackexchange: \href{http://tex.stackexchange.com/q/48591/2693}{Typesetting boardgame positions using ttf font}. Thanks to Andrew Stacey for helping me understand scaling nodes in TikZ, and the entire site for being a wealth of useful information and friendly people.
+This package was created as a response to the following question on TeX Stackexchange: \href{http://tex.stackexchange.com/q/48591/2693}{Typesetting boardgame positions using ttf font}.  The dice code, due to Seamus Bradley was posted in another question \href{http://tex.stackexchange.com/a/41628/2693}{epsdice does not respect beamer overlay}. Thanks to Andrew Stacey for helping me understand scaling nodes in TikZ, Enrico Gregorio and David Carlisle for understanding everything, and being happy to teach us all and the entire site for being a wealth of useful information and friendly people.
 \end{document}

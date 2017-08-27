@@ -1,0 +1,16 @@
+Point state: black, white, none
+
+Point count, 0,1, >1
+
+\blackmove{bar/pt}{pt/off}{bar/pt}{pt/off}
+\whitemove{bar/pt}{pt/off}{bar/pt}{pt/off}
+
+\ifstrcmp{#1}{bar}{decrement bar 1}{decrement pt#1}
+\ifstrcom{#2}{off}{incement off 1}{if ptstate#2=white
+	{\if ptct#2=1
+		\onbar0{1}
+		\else{Error}}
+	\else
+		increment pt#2
+		set state pt#2}
+		

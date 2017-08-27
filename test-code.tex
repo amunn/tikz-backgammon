@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{tikz}
+\makeatletter
+\newif\ifbk@displaydice\bk@displaydicefalse
+\def\bk@parsedice(#1#2){\gdef\bk@dice@one{#1}\gdef\bk@dice@two{#2}}
+\newcommand*{\roll}[2][black]{
+	\bk@displaydicetrue
+	\gdef\bk@dicestate{#1}
+	\bk@parsedice(#2)
+}
+\newcommand{\move}[1]{\bk@parsemove(#1)}
+\def\bk@parsemove(#1/#2,#3/#4){\blackmove{#1}{#2}{#3}{#4}}
+\newcommand{\showroll}{\bk@dice@one,\bk@dice@two}
+\newcommand\foo[1]{\def\tmp{\numexpr25-#1\relax}\the\tmp}
+\newcounter{bk0}
+\newcounter{bk1}
+\makeatother
+\begin{document}
+\roll{64}\showroll
+\setcounter{bk0}{4}
+
+\foo{10}
+
+\arabic{bk0}
+
+\foreach \x in {1,...,0} {
+does this work?};
+\end{document}

@@ -27,8 +27,10 @@
 % Construct the board
 %
 % alternating colours for the board
-\newcommand*{\bk@BW}{\pgfmathifthenelse{mod(\x,2)==0}{1}{0}\let\bk@fillstyle\pgfmathresult}
-\newcommand*{\bk@WB}{\pgfmathifthenelse{mod(\x,2)==0}{0}{1}\let\bk@fillstyle\pgfmathresult}
+\newcommand*{\bk@BW}{
+	\pgfmathifthenelse{mod(\x,2)==0}{1}{0}\let\bk@fillstyle\pgfmathresult}
+\newcommand*{\bk@WB}{
+	\pgfmathifthenelse{mod(\x,2)==0}{0}{1}\let\bk@fillstyle\pgfmathresult}
 % construct a  down point
 \newcommand*{\bk@dpoint}{%
 \bk@BW
@@ -39,7 +41,7 @@
 \bk@WB
 \draw[thick,style=\bk@fillstyle]
      (\x,32) -- (\x+3/2,17) -- (\x+3,32) -- cycle; }
-% set basic tikz parameters for the boards
+% set basic tikz parameters for the board points, dice, and stones;
 % in order to scale text and nodes, node styles are specified 'transform shape'
 %   
 \tikzset{1/.style={fill=\boardblack},
@@ -73,17 +75,26 @@
   \newcounter{bk@pt\x}
 	\expandafter\gdef\csname bk@state\x\endcsname{none}
 }
-% create 2 counters and macros for the state of the bar
+% create 2 counters state of the bar (we don't need a state)
 % this still needs to be implemented
-% we need 2 different commands, one for within a game
-% and the other for setting the board manually
-\foreach \x in {1,2}{
+% do we need 2 different commands, one for within a game
+% and the other for setting the board manually?
+% 0 for white 1 for black
+\foreach \x in {0,1}{
 	\newcounter{bk@bar\x}
-	\expandafter\gdef\csname bk@barstate\x\endcsname{none}
 }
+
+% create 2 counters and macros for the state of bearing off
+% this still needs to be implemented
+% this will work similarly to the bar state
+% 0 for white 1 for black
+\foreach \x in {0,1}{
+	\newcounter{bk@off\x}
+}
+
 % Current code has only one bar state (this is wrong)
-\newcounter{bk@bar}
-\newcommand*{\bk@barstate}{none}
+%\newcounter{bk@bar}
+%\newcommand*{\bk@barstate}{none}
 
 
 % some utility and debugging commands
@@ -91,7 +102,7 @@
 \newcommand*\bk@setstate[2]{\expandafter\gdef\csname bk@state#1\endcsname{#2}}
 \newcommand*\bk@setcount[2]{\global\csname c@bk@pt#1\endcsname #2\relax}
 \newcommand*\bk@barcount[2]{\advance\csname c@bk@bar#1\endscname#2\relax}
-\newcommand*\bk@barset[2]{\expandafter\gdef\csname\bk@barstate#1\endcsname{#2}}
+%\newcommand*\bk@barset[2]{\expandafter\gdef\csname\bk@barstate#1\endcsname{#2}}
 \newcommand*\usestate[1]{\csname bk@state#1\endcsname}
 
 % basic command to draw the board
@@ -112,7 +123,7 @@
 \newcommand*\bk@wstart{\ifbk@black\bk@downstart\else\bk@upstart\fi}
 \newcommand{\bk@drawboard}{%
 % draw the border and the point numbers
-% the nodes are numbered always from the point of view of black
+% the nodes are numbered internally from the point of view of black
 % nodes are labelled according to the view of the person playing
 % this is encoded in the conditional \ifbk@black. If this is false
 % the nodes will be labelled from white's point of view.
@@ -135,21 +146,24 @@
 % draw the bar and set the anchors for bar and the doubling cube and dice rolls
   \draw[very thick,fill=\barcolor](18,0) -- (18,32) -- (21,32) -- (21,0) -- cycle;
   \coordinate (barcenter) at (19.5,14);
+  \coordinate (whitebar) at (19.5,28);
+  \coordinate (blackbar) at (19.5,4);
   \coordinate (black double) at (42, 4);
   \coordinate (white double) at (42, 28);
   \coordinate (neutral double) at (42,16);
   \coordinate (black dice) at (9,16);
   \coordinate (white dice) at (30,16);
   \coordinate (caption) at (19.5,-4);
+  \coordinate (offblack) at (-4,4);
+  \coordinate (offwhite) at (-4,28);
 % draw the other half of the points
   \foreach \x in {21,24,...,36}
      \bk@dpoint;
   \foreach \x in {21,24,...,36}
      \bk@upoint;
 }
-% commands to place markers on a point and set its state
-% these are used for setting the initial board and for users
-% to make arbitrary board configurations
+%  commands to place markers on a point and set its state
+%  for users to make arbitrary board configurations
 
 % first for a black point (user command)
 \newcommand{\blackpoint}[2]{%
@@ -185,12 +199,42 @@
 									\else\relax\fi};
       }}
 }
-% command to place pieces on the bar
-% for the moment only one colour can be on the bar at a time
-% this is not yet correct; we need two counters/states	
+% command to place stones on the bar
+\newcommand{\bk@placebar}{%
+\foreach \y in {0,...,1}{
+	\def\bk@barcount{\the\csname c@bk@bar\y\endcsname}
+	\bk@maxstonesfalse
+	\ifnumcomp{\y}{=}{0}
+	{\global\let\bk@stonetextcolor\black
+	 \gdef\bk@stonecolor{white}
+	 \gdef\bk@barpos{whitebar}
+	 \gdef\bk@orient{below}}
+	{\global\let\bk@stonetextcolor\white
+	 \gdef\bk@stonecolor{black}
+	 \gdef\bk@barpos{blackbar}
+	 \gdef\bk@orient{above}}
+	\ifnumcomp{\bk@barcount}{>}{3}
+		{\gdef\bk@tmp{3}\bk@maxstonestrue\xdef\bk@tmpa{\bk@barcount}}
+		{\gdef\bk@tmp{\bk@barcount}}
+	\ifnumcomp{\bk@barcount}{>}{0}
+	{\foreach \x in {1,...,\bk@tmp}
+		\node[fill=\bk@stonecolor,style=stone,\bk@orient=(3*\x)-2 of \bk@barpos] {\ifbk@maxstones
+									\pgfmathparse{ifthenelse(\x==3,\bk@tmpa,"")}\pgfmathresult
+									\else\relax\fi};}{}}
+}
+
+% command to display borne off stones
+
+% user command to place pieces on the bar
+% syntax is \onbar{colour}{amount}
+% this is the manual set command so we don't increment the counter
 \newcommand*{\onbar}[2]{%
-  \setcounter{bk@bar}{#2}
-  \gdef\bk@barstate{#1}
+	\ifstrequal{#1}{black}
+		{\setcounter{bk@bar1}{#2}}
+		{\ifstrequal{#1}{white}
+			{\setcounter{bk@bar0}{#2}}
+			{\PackageError{tikz-backgammon}{Only 'white' or 'black' can be on the bar}{Check your spelling!}}
+		}
 }
 % user command to set a double
 % syntax is \double{<owner>}{amount}
@@ -225,15 +269,22 @@
 % into two separate parts so that the dice can be generated
 \def\bk@parsedice(#1#2){\gdef\bk@dice@one{#1}\gdef\bk@dice@two{#2}}
 
-% User command to display a roll; default is black; roll in nm format
+% User commands to display a roll; roll in nm format
 %
-\newcommand*{\roll}[2][black]{
+\newcommand*{\blackroll}[1]{
 	\bk@displaydicetrue
-	\gdef\bk@dicestate{#1}
-	\bk@parsedice(#2)
+	\gdef\bk@dicestate{black}
+	\bk@parsedice(#1)
 }
+\newcommand*{\whiteroll}[1]{
+	\bk@displaydicetrue
+	\gdef\bk@dicestate{white}
+	\bk@parsedice(#1)
+}
+
 % user command to draw a blank board
 \newcommand*{\blankboard}[1][]{%
+	\double{neutral}{64}
 	\begin{tikzpicture}[x=\defaultxy,y=\defaultxy,#1]
 		\bk@drawboard
 	\end{tikzpicture}
@@ -266,6 +317,7 @@
  
 % commands to move first black, then white
 % starred versions are for doubles
+% This needs to be rewritten to accept 'bar' and 'off' arguments 
 
 \newcommand\blackmove{\@ifstar\bk@blackdouble\bk@blacksingle}
 \newcommand\bk@blacksingle[4]{%
@@ -319,20 +371,21 @@
 		\bk@drawboard
 		\foreach \x in {1,...,24}{
  			\bk@placepoint{\x}{\the\csname c@bk@pt\x\endcsname}}
-% need to fix this bar code
-		\ifnumcomp{\value{bk@bar}}{>}{0}{
-		\foreach \x in {1,...,\value{bk@bar}}
-         \node[fill=\csname\bk@barstate\endcsname,style=stone,above=(3.5*\x) of barcenter)] {};}{}
  		\bk@placedouble
+		\bk@placebar
 		\ifbk@displaydice
 			\csname bk@\bk@dicestate dice\endcsname{\bk@dice@one}{\bk@dice@two}\fi
-			\node[align=center,anchor=north,inner sep=0pt] at (caption) {\bk@boardcaption};
+		\node[align=center,anchor=north,inner sep=0pt] at (caption)
+				{\bk@boardcaption};
 	\end{tikzpicture}
+% after drawing the board we reset the caption and the dice display
 	\bk@displaydicefalse
 	\boardcaption{}
 }
 \endinput
 % Still to be added:
-% need two bar states and counts (black/white) + ways to display them
-% need commands for entering from the bar (should be part of moves?)
+% need commands for entering from the bar and bearing off
+% alternative input of moves using standard notation  e.g.
+\newcommand{\move}[1]{\bk@parsemove(#1)}
+\def\bk@parsemove(#1/#2,#3/#4){\blackmove{#1}{#2}{#3}{#4}}
 
