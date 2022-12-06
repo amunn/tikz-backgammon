@@ -1,4 +1,4 @@
-% Copyright 2012 by Alan Munn
+% Copyright 2012-2022 by Alan Munn
 %
 % This package may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -15,10 +15,10 @@
 % This package consists of the file tikz-backgammon.sty and tikz-backgammon-dice.sty
 % and documentation files tikz-backgammon.tex and tikz-backgammon.pdf
 %
-% Version 0.8 2012/06/17
+% Version 0.8b 2022/12/
 %
 %
-\ProvidesPackage{tikz-backgammon}[2012/03/20 Backgammon game display using TikZ v0.8]
+\ProvidesPackage{tikz-backgammon}[2022/12/06 Backgammon game display using TikZ v0.8b]
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
 \usetikzlibrary{positioning,calc}
@@ -167,14 +167,16 @@
 
 % first for a black point (user command)
 \newcommand{\blackpoint}[2]{%
-  \bk@setstate{#1}{black}
-  \bk@setcount{#1}{#2}
+  \bk@setstate{#1}{black}%
+  \bk@setcount{#1}{#2}%
+  \ignorespaces
 }
 % same again for a white point (this is from point in whites view)
 \newcommand{\whitepoint}[2]{%
-	\def\bk@tmp{\numexpr 25-#1\relax}
-  \bk@setstate{\the\bk@tmp}{white}
-  \bk@setcount{\the\bk@tmp}{#2}
+  \def\bk@tmp{\numexpr 25-#1\relax}%
+  \bk@setstate{\the\bk@tmp}{white}%
+  \bk@setcount{\the\bk@tmp}{#2}%
+  \ignorespaces
 }
 % now a generic version of the command for use in displaying the board
 % this is  an internal command and uses the internal point numbers
@@ -182,13 +184,13 @@
 % one; 
 \newif\ifbk@maxstones
 \newcommand{\bk@placepoint}[2]{%
-	\bk@maxstonesfalse
-  \let\ptname#1
-  \def\bk@tmpb{black}
+	\bk@maxstonesfalse%
+  \let\ptname#1%
+  \def\bk@tmpb{black}%
   \ifcsstrequal{\usestate{\ptname}}{\bk@tmpb}{\let\bk@stonetextcolor\white}{\let\bk@stonetextcolor\black}
-  \ifnumcomp{#2}{<}{1}
+  \ifnumcomp{#2}{<}{1}%
      {}
-     {\ifnumcomp{#2}{>}{5}
+     {\ifnumcomp{#2}{>}{5}%
      		{\gdef\bk@tmp{5}\bk@maxstonestrue\xdef\bk@tmpa{#2}}
 				{\gdef\bk@tmp{#2}}
      {\pgfmathparse{ifthenelse(#1>12,"below","above")}\let\bk@pos\pgfmathresult
@@ -248,18 +250,18 @@
      }
 }
 % command to place the doubling cube in the correct place
-\newcommand*{\bk@placedouble}{
+\newcommand*{\bk@placedouble}{%
    \node at (\bk@doublestate) 
    {\drawdblcube[\bk@doublestate]{\bk@doublenum}};} % 
   
 % command to display the dice
-\newcommand*{\bk@whitedice}[2]{
+\newcommand*{\bk@whitedice}[2]{%
 	\node at (white dice) [left=0pt] (dice) 
 		{\drawdie[dot color=\black,line color=\black]{#1}};
 	\node at (white dice) [right=0pt] (dice) 
 		{\drawdie[dot color=\black,line color=\black]{#2}};
 }
-\newcommand*{\bk@blackdice}[2]{
+\newcommand*{\bk@blackdice}[2]{%
 	\node at (black dice) [left=0pt] (dice) 
 		{\drawdie[dot color=\white,dice color=\black]{#1}};
 	\node at (black dice) [right=0pt] (dice) 
@@ -271,15 +273,15 @@
 
 % User commands to display a roll; roll in nm format
 %
-\newcommand*{\blackroll}[1]{
+\newcommand*{\blackroll}[1]{%
 	\bk@displaydicetrue
 	\gdef\bk@dicestate{black}
-	\bk@parsedice(#1)
+	\bk@parsedice(#1)%
 }
-\newcommand*{\whiteroll}[1]{
+\newcommand*{\whiteroll}[1]{%
 	\bk@displaydicetrue
 	\gdef\bk@dicestate{white}
-	\bk@parsedice(#1)
+	\bk@parsedice(#1)%
 }
 
 % user command to draw a blank board

@@ -41,17 +41,25 @@ Black view
 \boardcaption{A good position\\for all sorts of moves}
 \blackboard
 \whiteboard
-\end{document}
 \blackmove*{6}{5}{13}{9}
 \whitemove*{19}{21}{17}{22}
 \blackmove{8}{6}{8}{6}
 \blackboard
-\whitebo
-%\blackmove{7}{6}{7}{6}
-%
-%\onbar{black}{2}
-%\double{white}{2}
-%\onbar{white}{2}
-%\displayboard
-\end{document}
+\blackmove{7}{6}{7}{6}
+
+\onbar{black}{2}
+\double{white}{2}
+\onbar{white}{2}
+\whiteboard
+
+% debug spacing problem with \whitepoint \blackpoint                                                         
+\resizebox{\textwidth}{!}{                                                      
+\double{neutral}{0}                                                             
+\foreach\i in {1,...,24}{%                                              
+\whitepoint{\i}{1}                                                          
+}                                                                              
+\blackboard                                                                   
+}                                                                               
+\end{document}    
+
 
