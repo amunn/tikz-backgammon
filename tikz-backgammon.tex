@@ -1,11 +1,10 @@
 \documentclass[11pt]{article}
 \title{\textbf{The \pkg{tikz-backgammon} package}}
 \author{\textbf{Alan Munn}\\Department of Linguistics and Languages\\\texttt{\href{mailto:amunn@msu.edu}{amunn@msu.edu}}}
-\date{Version 0.5\\March 20, 2012}
+\date{Version 0.9\\January 20, 2024}
 \usepackage[T1]{fontenc}
 \usepackage[margin=1.25in]{geometry}
 \usepackage{titling}
-\usepackage[utf8]{inputenc}
 \usepackage{array, booktabs, multicol, fancyhdr, xspace,tabularx}
 \usepackage{enumitem}
 \usepackage{fancyvrb,listings,url}
@@ -71,25 +70,30 @@
 \toprule
 \multicolumn{1}{>{\bfseries}c}{Command} & \multicolumn{1}{>{\bfseries}c}{Description}\\
 \midrule
-	 |\newgame| & set the pieces for a new game\\
+	 |\newgame| & set the pieces for a new game without drawing the board\\
 %	 |\newpieces| & set up the pieces for a new game without drawing the board\\
 	 |\blankboard| & draw a blank board	\\
-	 |\onbar| & add stones to the bar\\
-	 |\double| & set doubling cube and possession	\\
-	 |\blackmove| & move for black\\
-	 |\whitemove| & move for white\\
-%	 |\displayboard| & display board (will be deprecated)\\
+	 |\clearboard| & clear the board state without drawing anything\\
 	 |\blackboard| & display the current state of the game: black's view\\
 	 |\whiteboard| & display the current state of the game: white's view\\
+	 |\onbar{number}| & add stones to the bar\\
+	 |\double{owner}{value}| & set doubling cube and possession	\\
+	 |\blackmove{from}{to}{from}{to}| & move for black\\
+	 |\whitemove{from}{to}{from}{to}| & move for white\\
+	 |\blkmove{nm:from/to,from/to}| & black move in standard notation\\
+	 |\whtmove{nm:from/to,from/to}| & white move in standard notation\\
 \midrule
-	 |\blackpoint| & add black stones to a point\\
-	 |\whitepoint| & add white stones to a point\\
-	 |\placedouble| & command to place the double (only for manual setup)\\
-	 |\roll| & set the dice to a particular value for white or black\\
-	 |\boardcaption| & set a caption for the board\\
-	 |\boardcaptionformat| & format for the captions
+	 |\blackpoint{point}{number}| & add black stones to a point\\
+	 |\whitepoint{point}{number}| & add white stones to a point\\
+	 |\placedouble{value}| & command to place the double (only for manual setup)\\
+	 |\roll{nm}| & set the dice to a particular value n-m for white or black\\
+	 |\boardcaption{}| & set a caption for the board\\
+	 |\boardcaptionformat{}| & format for the captions\\
 \bottomrule
 \end{tabular}}
+
+\section{Updates}
+Due to increased recent interest in the package, it's likely that it will be revised and updated in the Summer of 2024.
 
 \section{Acknowledgements}
 This package was created as a response to the following question on TeX Stackexchange: \href{http://tex.stackexchange.com/q/48591/2693}{Typesetting boardgame positions using ttf font}.  The dice code, due to Seamus Bradley was posted in another question \href{http://tex.stackexchange.com/a/41628/2693}{epsdice does not respect beamer overlay}. Thanks to Andrew Stacey for helping me understand scaling nodes in TikZ, Enrico Gregorio and David Carlisle for understanding everything, and being happy to teach us all and the entire site for being a wealth of useful information and friendly people.

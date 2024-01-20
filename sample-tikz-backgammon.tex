@@ -1,26 +1,13 @@
 % This is a test document for the tikz-backgammon package.
+% The commands \blkmove and \whtmove don't support doubles at the moment
 \documentclass[12pt]{article}
 \usepackage{tikz-backgammon}
-\makeatletter
-\newcommand{\move}[1]{\bk@parsemove(#1)}
-\def\bk@parsemove(#1/#2,#3/#4){\blackmove{#1}{#2}{#3}{#4}}
-\makeatother
 \begin{document}
 \newgame
 \blackboard
-\move{24/18,24/17}
-%\newgame
-%\blankboard
-%\blackpoint{1}{2}
-\blackboard
-
-\blackboard
 \boardcaption{Black View}
-\move{24/18,18/13}
-\blackboard
-\move{13/7,13/9}
-\blackboard
-\move{7/5,9/5}
+\blkmove{65:24/18,18/13}
+\whtmove{53:8/4,5/4}
 \blackboard
 
 \blackroll{66}
@@ -52,14 +39,7 @@ Black view
 \onbar{white}{2}
 \whiteboard
 
-% debug spacing problem with \whitepoint \blackpoint                                                         
-\resizebox{\textwidth}{!}{                                                      
-\double{neutral}{0}                                                             
-\foreach\i in {1,...,24}{%                                              
-\whitepoint{\i}{1}                                                          
-}                                                                              
-\blackboard                                                                   
-}                                                                               
+                                                            
 \end{document}    
 
 
