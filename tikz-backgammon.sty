@@ -151,12 +151,14 @@
   \coordinate (black double) at (42, 4);
   \coordinate (white double) at (42, 28);
   \coordinate (neutral double) at (42,16);
-  \coordinate (black dice) at (9,16);
-  \coordinate (white dice) at (30,16);
+  \coordinate (white dice) at (9,16);
+  \coordinate (black dice) at (30,16);
   \coordinate (caption) at (19.5,-4);
   \coordinate (offblack) at (-4,4);
   \coordinate (offwhite) at (-4,28);
-% draw the other half of the points
+ draw the other half of the points
+ \tikzset{1/.style={fill=\boardwhite},
+				0/.style={fill=\boardblack}}
   \foreach \x in {21,24,...,36}
      \bk@dpoint
   \foreach \x in {21,24,...,36}
@@ -195,7 +197,7 @@
 				{\gdef\bk@tmp{#2}}
      {\pgfmathparse{ifthenelse(#1>12,"below","above")}\let\bk@pos\pgfmathresult
          \foreach \x in {1,...,\bk@tmp}
-            \node[fill=\usestate{\ptname},style=stone,\bk@pos=(3*\x)-2 of \ptname]
+            \node[style=stone,fill=\usestate{\ptname},\bk@pos=(3*\x)-2 of \ptname]
               	{\ifbk@maxstones
 									\pgfmathparse{ifthenelse(\x==5,\bk@tmpa,"")}\pgfmathresult
 									\else\relax\fi};
@@ -339,7 +341,7 @@
 	\expandafter\gdef\csname bk@state#2\endcsname{black}
 	\advance\csname c@bk@pt#3\endcsname -1\relax
 	\ifnumcomp{\the\csname c@bk@pt#3\endcsname}{=}{0}
-		{\expandafter\gdef\csname bk@state#1\endcsname{none}}
+		{\expandafter\gdef\csname bk@state#3\endcsname{none}}
 		{\expandafter\gdef\csname bk@state#3\endcsname{black}}
 	\ifnumcomp{#4}{=}{0}{}{\advance\csname c@bk@pt#4\endcsname 1\relax}
 	\expandafter\gdef\csname bk@state#4\endcsname{black}
@@ -362,7 +364,7 @@
 	\expandafter\gdef\csname bk@state\number\numexpr 25-#2\relax\endcsname{white}
 	\advance\csname c@bk@pt\number\numexpr 25-#3\relax\endcsname -1\relax
 	\ifnumcomp{\the\csname c@bk@pt\number\numexpr 25-#3\relax\endcsname}{=}{0}
-		{\expandafter\gdef\csname bk@state\number\numexpr 25-#1\relax\endcsname{none}}
+		{\expandafter\gdef\csname bk@state\number\numexpr 25-#3\relax\endcsname{none}}
 		{\expandafter\gdef\csname bk@state\number\numexpr 25-#3\relax\endcsname{white}}
 	\ifnumcomp{\numexpr 25-#4\relax}{=}{0}{}{\advance\csname c@bk@pt\number\numexpr 25-#4\relax\endcsname 1\relax}
 	\expandafter\gdef\csname bk@state#4\endcsname{white}
