@@ -1,4 +1,4 @@
-# tikz-backgammon Version 0.9
+# tikz-backgammon Version 0.9b
 
 This is a TikZ package for displaying backgammon games. It is currently in development and not officially released on CTAN.  New development of the package is likely to begin in the summer of 2025.
 
