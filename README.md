@@ -19,4 +19,6 @@ This is a TikZ package for displaying backgammon games. It is currently in devel
  This package consists of the file `tikz-backgammon.sty` and documentation files
  `tikz-backgammon.tex` and `tikz-backgammon.pdf`
 
- Version 0.9b 2025/11/03
+ Version 0.9c 2025/11/14
+ 
+

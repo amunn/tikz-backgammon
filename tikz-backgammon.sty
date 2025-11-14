@@ -15,7 +15,7 @@
 % This package consists of the file tikz-backgammon.sty and tikz-backgammon-dice.sty
 % and documentation files tikz-backgammon.tex and tikz-backgammon.pdf
 %
-% Version 0.9b 2025/11/03
+% Version 0.9c 2025/11/14
 %
 %
 \ProvidesPackage{tikz-backgammon}[2025/11/03 Backgammon game display using TikZ v0.9b]
@@ -101,7 +101,7 @@
 \newcommand*\showpoint[1]{\the\csname c@bk@pt#1\endcsname}
 \newcommand*\bk@setstate[2]{\expandafter\gdef\csname bk@state#1\endcsname{#2}}
 \newcommand*\bk@setcount[2]{\global\csname c@bk@pt#1\endcsname #2\relax}
-\newcommand*\bk@barcount[2]{\advance\csname c@bk@bar#1\endscname#2\relax}
+\newcommand*\bk@setbarcount[2]{\global\csname c@bk@bar#1\endscname#2\relax}
 %\newcommand*\bk@barset[2]{\expandafter\gdef\csname\bk@barstate#1\endcsname{#2}}
 \newcommand*\usestate[1]{\csname bk@state#1\endcsname}
 
@@ -299,6 +299,7 @@
 	\double{neutral}{64}
 	\bk@displaydicefalse
 	\foreach \x in {1,...,24}{\bk@setcount{\x}{0}}
+	\foreach \y in {0,...,1}{\setcounter{bk@bar\y}{0}}
 	}
 	
 
